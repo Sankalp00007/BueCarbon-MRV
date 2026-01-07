@@ -59,12 +59,11 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout, onLoginClick, onGoHome 
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <button className="hidden sm:block text-slate-500 font-bold uppercase tracking-widest text-[10px] hover:text-sky-600 transition-colors">Registry Docs</button>
                 <button 
                   onClick={onLoginClick}
                   className="bg-slate-900 text-white px-10 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-sky-600 hover:shadow-2xl hover:shadow-sky-500/20 transition-all duration-500 active:scale-95"
                 >
-                  Access Portal
+                  Login
                 </button>
               </div>
             )}

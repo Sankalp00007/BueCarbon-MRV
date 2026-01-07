@@ -22,7 +22,6 @@ const App: React.FC = () => {
   // Initial Data Fetch
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       try {
         // Setup initial mock users immediately so the app is usable without DB
         const initialUsers: User[] = MOCK_USERS.map(u => ({
@@ -53,8 +52,6 @@ const App: React.FC = () => {
           if (subError || creditError) {
             console.warn("Supabase fetch warning:", subError || creditError);
           }
-        } else {
-          console.info("Supabase connection not fully configured. Operating in local mode.");
         }
       } catch (err) {
         console.error("Critical sync error:", err);
@@ -95,19 +92,12 @@ const App: React.FC = () => {
   };
 
   const updateSubmission = async (id: string, updates: Partial<Submission>) => {
-    // 1. Find the target submission first from the current local state to avoid race conditions
     const currentSub = submissions.find(s => s.id === id);
-    if (!currentSub) {
-      console.warn("Could not find submission to update:", id);
-      return;
-    }
+    if (!currentSub) return;
 
     const updatedSub = { ...currentSub, ...updates };
-
-    // 2. Update local submissions state immediately for UI responsiveness
     setSubmissions(prev => prev.map(s => s.id === id ? updatedSub : s));
 
-    // 3. If the status is changing to APPROVED, create and persist a credit record
     if (updates.status === SubmissionStatus.APPROVED) {
       const newCredit: CreditRecord = {
         id: `c-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
@@ -116,29 +106,21 @@ const App: React.FC = () => {
         vintage: updatedSub.timestamp ? new Date(updatedSub.timestamp).getFullYear().toString() : new Date().getFullYear().toString(),
         status: 'AVAILABLE'
       };
-      
-      // Update local credits state - THIS ENSURES IT SHOWS ON CORPORATE DASHBOARD INSTANTLY
       setCredits(prev => [...prev, newCredit]);
-
-      // Sync Credit to Supabase
       const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
       if (isSupabaseConfigured) {
         try {
-          const { error } = await supabase.from('credits').insert([newCredit]);
-          if (error) throw error;
-          console.info("Credit successfully minted to the registry.");
+          await supabase.from('credits').insert([newCredit]);
         } catch (err) {
-          console.error("Failed to sync new credit to database:", err);
+          console.error("Failed to sync new credit:", err);
         }
       }
     }
     
-    // 4. Sync Submission status update to Supabase
     const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
     if (isSupabaseConfigured) {
       try {
-        const { error } = await supabase.from('submissions').update(updates).eq('id', id);
-        if (error) throw error;
+        await supabase.from('submissions').update(updates).eq('id', id);
       } catch (err) {
         console.error("Database submission update failed:", err);
       }
@@ -155,16 +137,9 @@ const App: React.FC = () => {
   const purchaseCredit = async (creditId: string) => {
     if (!user || user.role !== UserRole.CORPORATE) return;
     const updates = { status: 'SOLD' as const, ownerId: user.id, purchaseDate: new Date().toISOString() };
-    
-    // Update local state
     setCredits(prev => prev.map(c => c.id === creditId ? { ...c, ...updates } : c));
-    
-    // Update user stats locally
     const purchasedAmount = credits.find(c => c.id === creditId)?.amount || 0;
-    handleUpdateUser(user.id, { 
-      creditsPurchased: (user.creditsPurchased || 0) + purchasedAmount 
-    });
-
+    handleUpdateUser(user.id, { creditsPurchased: (user.creditsPurchased || 0) + purchasedAmount });
     const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
     if (isSupabaseConfigured) {
       try {
@@ -176,13 +151,6 @@ const App: React.FC = () => {
   };
 
   const renderDashboard = () => {
-    if (isLoading) return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-slate-500 font-black uppercase tracking-widest text-xs animate-pulse">Initializing Protocol...</p>
-      </div>
-    );
-
     if (!user) return <LandingPage onStart={() => setShowAuth(true)} />;
 
     switch (user.role) {

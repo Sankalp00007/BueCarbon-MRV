@@ -26,7 +26,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   return (
     <div className="space-y-32 pb-32 animate-in fade-in duration-1000">
       {/* Hero Section */}
-      <section className="relative h-[750px] flex items-center justify-center overflow-hidden rounded-[3.5rem] shadow-2xl mx-4 sm:mx-0 group">
+      <section className="relative h-[800px] flex items-center justify-center overflow-hidden rounded-[3.5rem] shadow-2xl mx-4 sm:mx-0 group">
         <img 
           src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=2000" 
           className="absolute inset-0 w-full h-full object-cover brightness-[0.35] transition-transform duration-[10s] group-hover:scale-110"
@@ -34,13 +34,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         />
         <div className="relative text-center text-white px-6 max-w-5xl z-10">
           <div className="inline-block px-6 py-2 mb-8 rounded-full bg-sky-500/20 backdrop-blur-xl border border-sky-400/30 text-sky-300 text-[11px] font-black uppercase tracking-[0.4em] shadow-lg">
-            Future of MRV
+            Institutional dMRV Protocol
           </div>
           <h1 className="text-6xl md:text-9xl font-bold mb-8 leading-tight tracking-tight">
             The Digital <span className="text-sky-400">Blue Carbon</span> Ledger
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-slate-200 font-light leading-relaxed max-w-3xl mx-auto opacity-90">
-            A blockchain-powered verification engine connecting high-impact coastal restoration with global capital through AI-validated environmental truth.
+            A blockchain-powered verification engine connecting high-impact coastal restoration with global capital through Gemini-validated environmental truth.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <button 
@@ -85,17 +85,85 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
           <div className="lg:w-1/2 grid gap-8">
             <div className="group p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all">
               <div className="w-14 h-14 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:rotate-6 transition-transform">💎</div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">The Business Aspect</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">The Premium Multiplier</h3>
               <p className="text-slate-500 leading-relaxed font-light text-sm">
                 Blue Carbon credits trade at a 3x premium compared to terrestrial credits due to their higher permanence and significant co-benefits. Our platform provides the institutional-grade data needed to unlock these high-value assets.
               </p>
             </div>
             <div className="group p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all">
               <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:rotate-6 transition-transform">🏢</div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Why Fund This Protocol?</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Strategic Climate Alpha</h3>
               <p className="text-slate-500 leading-relaxed font-light text-sm">
                 Investors gain exposure to a high-growth environmental commodity while supporting projects that protect $65B in coastal infrastructure. This is not just conservation; it is critical climate risk management.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gemini Integration Section */}
+      <section className="max-w-7xl mx-auto px-4">
+        <div className="bg-gradient-to-br from-slate-50 to-sky-50 rounded-[4rem] p-12 md:p-24 border border-sky-100 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-1/3 h-full opacity-5 pointer-events-none">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#0EA5E9" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87.1,-15.7,85.6,-0.9C84,14,77.5,28,68.4,40.1C59.3,52.2,47.5,62.4,34.2,69.5C20.8,76.6,5.9,80.6,-9.3,79.1C-24.5,77.6,-39.9,70.5,-52.8,60.1C-65.7,49.8,-76.2,36.2,-81.2,21C-86.2,5.8,-85.7,-11,-79.8,-26.1C-73.9,-41.2,-62.6,-54.5,-49,-61.6C-35.4,-68.7,-17.7,-69.6,-0.6,-68.6C16.5,-67.6,31.3,-83.6,44.7,-76.4Z" transform="translate(100 100)" />
+            </svg>
+          </div>
+          
+          <div className="relative z-10 flex flex-col lg:flex-row gap-20 items-center">
+            <div className="lg:w-1/2">
+              <div className="inline-flex items-center space-x-3 bg-sky-500/10 px-4 py-2 rounded-full mb-8 border border-sky-500/20">
+                <span className="w-2 h-2 bg-sky-500 rounded-full animate-pulse"></span>
+                <span className="text-[10px] font-black text-sky-700 uppercase tracking-widest">Powered by Gemini 2.5 Flash</span>
+              </div>
+              <h2 className="text-5xl font-bold text-slate-900 mb-8 leading-tight">
+                The Power of <br/><span className="text-sky-500 underline decoration-sky-200 underline-offset-8 italic">Ecological AI</span>
+              </h2>
+              <div className="space-y-8">
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg text-xl border border-sky-50">🔍</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-2">Sub-Pixel Biometric Analysis</h4>
+                    <p className="text-slate-500 text-sm font-light leading-relaxed">Gemini identifies species-specific markers like pneumatophores and prop roots that are invisible to standard computer vision models.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg text-xl border border-sky-50">📍</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-2">Real-Time Spatial Grounding</h4>
+                    <p className="text-slate-500 text-sm font-light leading-relaxed">Leveraging Gemini's Google Maps tool, we cross-reference ground imagery with high-res satellite data to eliminate double-counting.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg text-xl border border-sky-50">🏛️</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-2">Automated Audit Synthesis</h4>
+                    <p className="text-slate-500 text-sm font-light leading-relaxed">Gemini produces 5-point audit dossiers in milliseconds, reducing the time for scientific verifiers to approve a credit from 6 months to 6 minutes.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="lg:w-1/2 w-full">
+              <div className="bg-white rounded-[3rem] p-8 shadow-2xl border border-slate-100 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent pointer-events-none"></div>
+                <div className="flex items-center justify-between mb-8">
+                   <div className="flex items-center space-x-3">
+                     <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center text-sky-600 font-bold text-[10px]">AI</div>
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Verification Frame</span>
+                   </div>
+                   <div className="text-[10px] font-mono text-emerald-500 font-bold">MATCH: 98.4%</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?auto=format&fit=crop&q=80&w=1000" className="w-full h-64 object-cover rounded-2xl mb-8 group-hover:scale-105 transition-transform duration-700" alt="Mangrove AI" />
+                <div className="space-y-4">
+                  <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-sky-500 w-[92%]"></div>
+                  </div>
+                  <div className="p-4 bg-sky-50 rounded-xl border border-sky-100 italic text-[11px] text-sky-800 font-medium">
+                    "Identified Rhizophora mangle clusters with 15% prop root density. Sediment carbon indicators consistent with intertidal mudflat classification at coordinates [8.409S, 115.188E]."
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -165,8 +233,33 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         </div>
       </section>
 
-      {/* MRV Pipeline */}
+      {/* Why Invest Section */}
       <section className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-24">
+           <div className="text-sky-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4">Investment Thesis</div>
+           <h2 className="text-5xl font-bold text-slate-900 mb-6">Why Invest in the Protocol?</h2>
+           <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto">
+             The Blue Carbon market is projected to reach $50B by 2030. We are building the infrastructure that makes this growth transparent and secure.
+           </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+           {[
+             { title: 'Quality Alpha', desc: 'Institutional buyers pay a 300% premium for Blue Carbon due to co-benefits in biodiversity and flood protection.', icon: '📈' },
+             { title: 'Immutable Trust', desc: 'Every credit is linked to an on-chain hash of AI-verified field data, eliminating greenwashing risk.', icon: '🛡️' },
+             { title: 'Early Mover', desc: 'The most efficient carbon sink biomes are currently the most undervalued assets in the environmental commodity space.', icon: '⚡' }
+           ].map((item, i) => (
+             <div key={i} className="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                <div className="text-4xl mb-6">{item.icon}</div>
+                <h4 className="text-xl font-black text-slate-900 mb-4 uppercase tracking-tight">{item.title}</h4>
+                <p className="text-slate-500 text-sm font-light leading-relaxed">{item.desc}</p>
+             </div>
+           ))}
+        </div>
+      </section>
+
+      {/* MRV Pipeline */}
+      <section className="max-w-6xl mx-auto px-4 pb-12">
         <div className="text-center mb-24">
           <h2 className="text-5xl font-bold mb-6 text-slate-900">The MRV Pipeline</h2>
           <p className="text-slate-500 max-w-2xl mx-auto font-light text-lg">
@@ -178,8 +271,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
           <div className="hidden md:block absolute top-[60px] left-[10%] right-[10%] h-0.5 bg-slate-100 z-0"></div>
           
           {[
-            { step: '01', role: 'Community Member', title: 'Field Capture', desc: 'Members upload geofenced, timestamped site data. AI analyzes biometrics for species density.', icon: '📸' },
-            { step: '02', role: 'Scientific NGO', title: 'Verification', desc: 'Third-party auditors cross-reference field data with high-res satellite imagery.', icon: '🕵️' },
+            { step: '01', role: 'Community Member', title: 'Field Capture', desc: 'Members upload geofenced, timestamped site data. Gemini analyzes biometrics for species density.', icon: '📸' },
+            { step: '02', role: 'Scientific NGO', title: 'Verification', desc: 'Third-party auditors review Gemini-generated dossiers and cross-reference satellite imagery.', icon: '🕵️' },
             { step: '03', role: 'Registry Admin', title: 'Registry Mint', desc: 'Administrators perform a final compliance check before minting a unique cryptographic asset.', icon: '🏛️' },
             { step: '04', role: 'Corporations', title: 'Market Purchase', desc: 'Buyers purchase and "retire" credits. Smart contracts distribute funds directly.', icon: '💎' }
           ].map((item, idx) => (
