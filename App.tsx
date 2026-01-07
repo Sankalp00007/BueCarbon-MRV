@@ -35,8 +35,7 @@ const App: React.FC = () => {
         })) as User[];
         setAllUsers(initialUsers);
 
-        // Check if Supabase is connected (either via env or hardcoded fallback)
-        // Accessing supabaseUrl directly if it's available on the instance or using our derived check
+        // Check if Supabase is connected
         const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
 
         if (isSupabaseConfigured) {
@@ -97,52 +96,50 @@ const App: React.FC = () => {
   };
 
   const updateSubmission = async (id: string, updates: Partial<Submission>) => {
-    let targetSub: Submission | undefined;
+    // 1. Find the target submission first from the current local state to avoid race conditions
+    const currentSub = submissions.find(s => s.id === id);
+    if (!currentSub) {
+      console.warn("Could not find submission to update:", id);
+      return;
+    }
 
-    // 1. Update local submissions state and capture the target submission for credit generation
-    setSubmissions(prev => {
-      return prev.map(s => {
-        if (s.id === id) {
-          const updated = { ...s, ...updates };
-          targetSub = updated;
-          return updated;
-        }
-        return s;
-      });
-    });
+    const updatedSub = { ...currentSub, ...updates };
 
-    // 2. If the status is changing to APPROVED, create a credit record
+    // 2. Update local submissions state immediately for UI responsiveness
+    setSubmissions(prev => prev.map(s => s.id === id ? updatedSub : s));
+
+    // 3. If the status is changing to APPROVED, create and persist a credit record
     if (updates.status === SubmissionStatus.APPROVED) {
-      const subToVerify = targetSub || submissions.find(s => s.id === id);
+      const newCredit: CreditRecord = {
+        id: `c-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+        submissionId: id,
+        amount: updatedSub.creditsGenerated || 1.0,
+        vintage: updatedSub.timestamp ? new Date(updatedSub.timestamp).getFullYear().toString() : new Date().getFullYear().toString(),
+        status: 'AVAILABLE'
+      };
       
-      if (subToVerify) {
-        const newCredit: CreditRecord = {
-          id: `c-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-          submissionId: id,
-          amount: subToVerify.creditsGenerated,
-          vintage: new Date().getFullYear().toString(),
-          status: 'AVAILABLE'
-        };
-        
-        // Update credits state locally
-        setCredits(prev => [...prev, newCredit]);
+      // Update local credits state - THIS ENSURES IT SHOWS ON CORPORATE DASHBOARD INSTANTLY
+      setCredits(prev => [...prev, newCredit]);
 
-        const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
-        if (isSupabaseConfigured) {
-          try {
-            await supabase.from('credits').insert([newCredit]);
-          } catch (err) {
-            console.error("Failed to sync new credit to database:", err);
-          }
+      // Sync Credit to Supabase
+      const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
+      if (isSupabaseConfigured) {
+        try {
+          const { error } = await supabase.from('credits').insert([newCredit]);
+          if (error) throw error;
+          console.info("Credit successfully minted to the registry.");
+        } catch (err) {
+          console.error("Failed to sync new credit to database:", err);
         }
       }
     }
     
-    // 3. Sync submission status update
+    // 4. Sync Submission status update to Supabase
     const isSupabaseConfigured = supabase && !supabase.supabaseUrl.includes('placeholder');
     if (isSupabaseConfigured) {
       try {
-        await supabase.from('submissions').update(updates).eq('id', id);
+        const { error } = await supabase.from('submissions').update(updates).eq('id', id);
+        if (error) throw error;
       } catch (err) {
         console.error("Database submission update failed:", err);
       }
