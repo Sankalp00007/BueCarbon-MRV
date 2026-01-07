@@ -34,7 +34,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         />
         <div className="relative text-center text-white px-6 max-w-5xl z-10">
           <div className="inline-block px-6 py-2 mb-8 rounded-full bg-sky-500/20 backdrop-blur-xl border border-sky-400/30 text-sky-300 text-[11px] font-black uppercase tracking-[0.4em] shadow-lg">
-            Institutional dMRV Protocol
+            future of mrv
           </div>
           <h1 className="text-6xl md:text-9xl font-bold mb-8 leading-tight tracking-tight">
             The Digital <span className="text-sky-400">Blue Carbon</span> Ledger
