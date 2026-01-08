@@ -9,15 +9,13 @@
     <script>
       /**
        * Initialize global process object for runtime environment variables.
-       * Vite will also inject these during build via the define config.
+       * This acts as a fallback for libraries expecting process.env.
        */
       window.process = { 
         env: { 
           NODE_ENV: 'production',
           API_KEY: '', 
-          GOOGLE_MAPS_API_KEY: '',
-          SUPABASE_URL: 'https://smatromfcrduzpipjwot.supabase.co',
-          SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtYXRyb21mY3JkdXpwaXBqd290Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3MTkwMDYsImV4cCI6MjA4MzI5NTAwNn0.Xz9-8BC-XRXgKiGJRh8uvSULmeES84jYXl7YVYt3MkY'
+          GOOGLE_MAPS_API_KEY: ''
         } 
       };
       window.global = window;
@@ -68,7 +66,6 @@
 </head>
 <body class="selection:bg-sky-100 selection:text-sky-900">
     <div id="root"></div>
-    <!-- Vite entry point -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
