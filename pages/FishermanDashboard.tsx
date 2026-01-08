@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { User, Submission, SubmissionStatus } from '../types.ts';
 import { verifyRestorationImage, askAuditorQuestion } from '../services/geminiService.ts';
 import { ICONS } from '../constants.tsx';
+import CoastalMap from '../components/CoastalMap.tsx';
 
 interface FishermanDashboardProps {
   user: User;
@@ -125,7 +126,7 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-[10px] font-black text-emerald-700 uppercase tracking-[0.2em]">Live Field Monitoring</span>
           </div>
-          <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 text-slate-900">Member <span className="text-sky-600">Portal</span></h1>
+          <h1 className="text-5xl font-extrabold tracking-tight text-slate-900">Member <span className="text-sky-600">Portal</span></h1>
           <p className="text-slate-500 font-light text-xl leading-relaxed max-w-2xl">
             Community-driven ecosystem verification tools. Capture site evidence to mint high-integrity Blue Carbon credits.
           </p>
@@ -167,39 +168,12 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
       )}
 
       <div className="grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 group">
-          <div className="bg-white rounded-[3rem] shadow-sm border border-slate-100 overflow-hidden min-h-[500px] flex flex-col premium-shadow transition-all hover:shadow-2xl">
-            <div className="px-10 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="font-black text-slate-800 flex items-center text-[11px] uppercase tracking-[0.2em]">
-                <span className="w-2.5 h-2.5 bg-sky-500 rounded-full mr-3 animate-pulse"></span>
-                Site Geolocation Layer
-              </h3>
-              {focusedSub && (
-                <div className="text-[10px] font-mono text-slate-400 bg-white px-3 py-1 rounded-lg border border-slate-100">
-                  REF: {focusedSub.location?.lat?.toFixed(6)}, {focusedSub.location?.lng?.toFixed(6)}
-                </div>
-              )}
-            </div>
-            <div className="flex-1 relative bg-slate-50">
-              {submissions.length > 0 && focusedSub ? (
-                <iframe 
-                  key={focusedSub.id}
-                  title="Project Map Overview"
-                  width="100%" 
-                  height="100%" 
-                  frameBorder="0" 
-                  style={{ border: 0, minHeight: '400px' }}
-                  src={`https://www.google.com/maps/embed/v1/view?key=${process.env.GOOGLE_MAPS_API_KEY}&center=${focusedSub.location.lat},${focusedSub.location.lng}&zoom=16&maptype=satellite`}
-                  allowFullScreen
-                ></iframe>
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 space-y-6">
-                  <div className="w-20 h-20 bg-slate-100 rounded-[2rem] flex items-center justify-center text-4xl">🛰️</div>
-                  <p className="font-bold text-center px-12 text-sm uppercase tracking-widest opacity-40">No coordinates established. Establish a node by uploading site data.</p>
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="lg:col-span-2 group h-[500px]">
+          <CoastalMap 
+            submissions={submissions}
+            onMarkerClick={(s) => setFocusedSubmissionId(s.id)}
+            center={focusedSub?.location}
+          />
         </div>
 
         <div className="space-y-8">
@@ -238,7 +212,7 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
 
       <div className="bg-white rounded-[3rem] shadow-sm border border-slate-100 overflow-hidden premium-shadow">
         <div className="px-10 py-8 border-b border-slate-100 flex justify-between items-center">
-          <h2 className="font-black text-xl text-slate-900 uppercase tracking-tight">Node History Log</h2>
+          <h2 className="font-black text-xl text-slate-900 uppercase tracking-tight text-slate-900">Node History Log</h2>
           <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] bg-slate-50 px-4 py-1.5 rounded-full border border-slate-100">Sync Count: {submissions.length}</div>
         </div>
         <div className="overflow-x-auto no-scrollbar">
@@ -295,7 +269,7 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
                     <td className="px-10 py-8 text-right">
                        <button 
                         onClick={(e) => {
-                          e.stopPropagation(); // CRITICAL: Stop propagation to row select
+                          e.stopPropagation();
                           setInspectedSub(s);
                           setChatLog([]);
                         }}
@@ -312,15 +286,14 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
         </div>
       </div>
 
-      {/* SCIENTIFIC INSPECTION OVERLAY */}
       {inspectedSub && (
         <div className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex items-center justify-center p-0 lg:p-10 animate-in fade-in duration-300">
           <div className="bg-white w-full h-full max-w-7xl lg:h-auto lg:max-h-[95vh] lg:rounded-[3rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
-            <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between shrink-0">
+            <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between shrink-0 text-slate-900">
                <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-sky-600 font-bold text-xl">🔬</div>
                   <div>
-                    <h2 className="text-lg font-black text-slate-900 uppercase tracking-tight text-slate-900">Ecosystem Dossier</h2>
+                    <h2 className="text-lg font-black text-slate-900 uppercase tracking-tight">Ecosystem Dossier</h2>
                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Biometric Evidence #{inspectedSub.id.slice(-8)}</p>
                   </div>
                </div>
@@ -351,13 +324,13 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
                      </div>
                   </div>
 
-                  <div className="grid lg:grid-cols-2 gap-6">
+                  <div className="grid lg:grid-cols-2 gap-6 h-[300px]">
                     <div className="space-y-3">
                       <h5 className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center">
                         <span className="w-1.5 h-1.5 bg-sky-500 rounded-full mr-2"></span>
                         On-Site Field Capture
                       </h5>
-                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md">
+                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md h-[250px]">
                         <ImageWithFallback src={inspectedSub.imageUrl} className="w-full h-full object-cover" alt="site evidence" />
                       </div>
                     </div>
@@ -366,12 +339,8 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
                         <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2"></span>
                         Registry Spatial Map
                       </h5>
-                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md">
-                        <iframe 
-                          title="Satellite Grounding"
-                          width="100%" height="100%" frameBorder="0" 
-                          src={`https://www.google.com/maps/embed/v1/view?key=${process.env.GOOGLE_MAPS_API_KEY}&center=${inspectedSub.location.lat},${inspectedSub.location.lng}&zoom=19&maptype=satellite`}
-                        ></iframe>
+                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md h-[250px]">
+                        <CoastalMap submissions={[inspectedSub]} zoom={18} center={inspectedSub.location} />
                       </div>
                     </div>
                   </div>

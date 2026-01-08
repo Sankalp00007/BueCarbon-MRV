@@ -1,7 +1,7 @@
-
 import React, { useState, useMemo } from 'react';
 import { User, Submission, SubmissionStatus, AuditLog } from '../types.ts';
 import { askAuditorQuestion } from '../services/geminiService.ts';
+import CoastalMap from '../components/CoastalMap.tsx';
 
 type DashboardPage = 'PENDING_QUEUE' | 'VERIFIER_HISTORY';
 
@@ -80,7 +80,10 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ user, submissions, onUpdate
     const q = aiQuestion;
     setAiQuestion('');
     try {
-      const answer = await askAuditorQuestion(selectedSub.imageUrl, q);
+      const base64Data = selectedSub.imageUrl.includes(',') 
+        ? selectedSub.imageUrl.split(',')[1] 
+        : selectedSub.imageUrl;
+      const answer = await askAuditorQuestion(base64Data, q);
       setChatLog(prev => [...prev, { q, a: answer || "Interrogation complete." }]);
     } catch (e) {
       setChatLog(prev => [...prev, { q, a: "Analysis confirms site biometric consistency." }]);
@@ -101,7 +104,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ user, submissions, onUpdate
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] animate-in fade-in duration-500 overflow-hidden font-sans border border-slate-200 bg-white rounded-[2.5rem] shadow-sm relative">
+    <div className="flex flex-col h-[calc(100vh-140px)] animate-in fade-in duration-500 overflow-hidden font-sans border border-slate-200 bg-white rounded-[2.5rem] shadow-sm relative text-slate-900">
       <div className="bg-white border-b border-slate-100 p-4 shrink-0 flex items-center justify-between z-10">
         <div className="flex bg-slate-100 p-1 rounded-2xl">
           <button 
@@ -215,7 +218,7 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ user, submissions, onUpdate
 
       {selectedSub && (
         <div className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-md flex items-center justify-center p-0 lg:p-10 animate-in fade-in duration-300">
-          <div className="bg-white w-full h-full max-w-7xl lg:h-auto lg:max-h-[95vh] lg:rounded-[3rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+          <div className="bg-white w-full h-full max-w-7xl lg:h-auto lg:max-h-[95vh] lg:rounded-[3rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 text-slate-900">
             <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between shrink-0">
                <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-sky-600 font-bold">🔬</div>
@@ -251,13 +254,13 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ user, submissions, onUpdate
                      </div>
                   </div>
 
-                  <div className="grid lg:grid-cols-2 gap-6">
+                  <div className="grid lg:grid-cols-2 gap-6 h-[300px]">
                     <div className="space-y-3">
                       <h5 className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center">
                         <span className="w-1.5 h-1.5 bg-sky-500 rounded-full mr-2"></span>
                         On-Site Photographic Evidence
                       </h5>
-                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md">
+                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md h-[250px]">
                         <ImageWithFallback src={selectedSub.imageUrl} className="w-full h-full object-cover" alt="site evidence" />
                       </div>
                     </div>
@@ -266,13 +269,8 @@ const NGODashboard: React.FC<NGODashboardProps> = ({ user, submissions, onUpdate
                         <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2"></span>
                         Satellite Spatial Grounding
                       </h5>
-                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md">
-                        <iframe 
-                          title="Satellite Grounding"
-                          width="100%" height="100%" frameBorder="0" 
-                          // Fixed: Access process.env.GOOGLE_MAPS_API_KEY directly instead of via window object.
-                          src={`https://www.google.com/maps/embed/v1/view?key=${process.env.GOOGLE_MAPS_API_KEY}&center=${selectedSub.location.lat},${selectedSub.location.lng}&zoom=19&maptype=satellite`}
-                        ></iframe>
+                      <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-slate-50 shadow-md h-[250px]">
+                        <CoastalMap submissions={[selectedSub]} zoom={18} center={selectedSub.location} />
                       </div>
                     </div>
                   </div>

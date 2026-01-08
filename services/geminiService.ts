@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 export async function verifyRestorationImage(imageBase64: string, expectedType: 'MANGROVE' | 'SEAGRASS', lat: number, lng: number) {
@@ -49,7 +48,7 @@ export async function verifyRestorationImage(imageBase64: string, expectedType: 
             }
           }
         },
-        systemInstruction: "You are a professional Blue Carbon auditor. Use rigorous ecological standards. Be critical of visual evidence to prevent double-counting and fraud.",
+        systemInstruction: "You are a professional Blue Carbon auditor. Use rigorous ecological standards. Be critical of visual evidence to prevent double-counting and fraud. When using Maps grounding, prioritize satellite layer analysis.",
       },
     });
 
