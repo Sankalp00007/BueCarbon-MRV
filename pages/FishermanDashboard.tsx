@@ -76,12 +76,12 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
         };
 
         onAddSubmission(newSubmission);
+        setFocusedSubmissionId(newSubmission.id);
       } catch (err) {
         console.error("Upload process error:", err);
       } finally {
         setIsUploading(false);
         setUploadStatus('');
-        setFocusedSubmissionId(`sub-${Date.now()}`); // approximate since we don't have return from onAddSubmission
       }
     };
     reader.readAsDataURL(file);
@@ -93,7 +93,6 @@ const FishermanDashboard: React.FC<FishermanDashboardProps> = ({ user, submissio
     const q = aiQuestion;
     setAiQuestion('');
     try {
-      // Correctly extract base64 data from the data URI stored in the submission
       const base64Data = inspectedSub.imageUrl.includes(',') 
         ? inspectedSub.imageUrl.split(',')[1] 
         : inspectedSub.imageUrl;
